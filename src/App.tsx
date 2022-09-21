@@ -1,22 +1,45 @@
-import React from 'react'
 import HeaderNotes from './Components/HeaderNotes'
 import SummaryHeaderNotes from './Components/SummaryHeaderNotes'
 import ItemNoteList from './Components/ItemNoteList'
-import { dataActive, dataArchived, summaryData } from './data'
+import Modal from './Components/Modal'
+import store from './store/state'
+import { calculateSummaryList } from './helperFunctions/calculateSummaryList'
+import { takeEventClick, showModal } from './helperFunctions/takeEventClick'
 
-function App() {
+function App(props: any) {
+  let active = props.store.getState().dataActive
+  let archived = props.store.getState().dataArchived
+  let summary = props.store.getState().summaryData
+  calculateSummaryList(active, archived, summary)
+
+  const activeData = () => {
+    store.dispatch({ type: 'ACTIVE_NOTE' })
+  }
+
+  const archivedData = () => {
+    store.dispatch({ type: 'ARCHIVED_NOTE' })
+  }
+
   return (
     <div className="container">
-      <div className="notes-table">
+      {props.store.getState().showModal
+        ? <Modal data={props.store.getState()} />
+        : null
+      }
+
+      <div className="notes-table" onClick={(e) => takeEventClick(e)}>
         <HeaderNotes />
-        <ItemNoteList data={dataActive} />
+        {props.store.getState().active
+          ? <ItemNoteList data={props.store.getState().dataActive} />
+          : <ItemNoteList data={props.store.getState().dataArchived} />
+        }
       </div>
-      <button id="active">Show active note</button>
-      <button id="archived">Show archived note</button>
-      <button id="create-note">Create Note</button>
+      <button id="active" onClick={activeData}>Show active note</button>
+      <button id="archived" onClick={archivedData}>Show archived note</button>
+      <button id="create-note" onClick={() => showModal()}>Create Note</button>
       <div className="summary-table">
         <SummaryHeaderNotes />
-        <ItemNoteList data={summaryData} />
+        <ItemNoteList data={props.store.getState().summaryData} />
       </div>
     </div>
   );

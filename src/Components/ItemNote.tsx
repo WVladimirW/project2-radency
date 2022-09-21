@@ -1,6 +1,4 @@
-import React from 'react'
-
-function ItemNote(props) {
+function ItemNote(props: any) {
    if (props.data.id) {
       return (
          <div id={props.data.id} className="list-item-notes">
@@ -10,9 +8,9 @@ function ItemNote(props) {
             <div className="category">{props.data.category}</div>
             <div className="content">{props.data.content}</div>
             <div className="dates">{props.data.dates}</div>
-            <div className="icon-edit"></div>
-            <div className="icon-archive"></div>
-            <div className="icon-delete"></div>
+            <div className="icon-edit" id={props.data.id}></div>
+            <div className="icon-archive" id={props.data.id}></div>
+            <div className="icon-delete" id={props.data.id}></div>
          </div>
       )
    } else {

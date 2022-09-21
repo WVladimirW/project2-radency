@@ -1,5 +1,3 @@
-import React from 'react'
-
 function HeaderNotes() {
    return (
       <div className="header-notes">
